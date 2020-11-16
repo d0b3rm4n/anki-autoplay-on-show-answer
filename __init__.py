@@ -1,18 +1,18 @@
-import time
-
-from anki.hooks import wrap
-from anki.sound import playFromText
-from aqt.reviewer import Reviewer
+from aqt import gui_hooks
 from aqt import mw
+from aqt.sound import av_player
 
-def myShowAnswer(self):
+def auto_play_all(card):
     config = mw.addonManager.getConfig(__name__)
+    tags = None
 
     if config['play_question_audio']:
-	    playFromText(self.card.q())
+        tags = card.question_av_tags()
 
     if config['play_answer_audio']:
-	    playFromText(self.card.a())
+        tags += card.answer_av_tags()
 
-Reviewer._showAnswer = wrap(Reviewer._showAnswer, myShowAnswer)
+    if tags:
+        av_player.play_tags(tags)
 
+gui_hooks.reviewer_did_show_answer.append(auto_play_all)
