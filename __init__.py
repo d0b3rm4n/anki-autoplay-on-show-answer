@@ -4,10 +4,10 @@ from aqt.sound import av_player
 
 def auto_play_all(card):
     config = mw.addonManager.getConfig(__name__)
-    tags = None
+    tags = []
 
     if config['play_question_audio']:
-        tags = card.question_av_tags()
+        tags += card.question_av_tags()
 
     if config['play_answer_audio']:
         tags += card.answer_av_tags()
